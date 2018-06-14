@@ -44,7 +44,7 @@
   "author": "forked from tanoy kumar maity",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tanoy009/ng4-geoautocomplete/issues"
+    "url": "https://github.com/trovum/ngx-geoautocomplete/issues"
   },
   "homepage": "https://github.com/trovum/ngx-geoautocomplete#readme",
   "devDependencies": {
@@ -106,7 +106,6 @@
   "peerDependencies": {},
   "dependencies": {
     "@angular/animations": "^6.0.5",
-    "@angular/cli": "^6.0.8",
     "@angular/platform-server": "^6.0.5",
     "@angular/router": "^6.0.5"
   },
