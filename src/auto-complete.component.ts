@@ -9,7 +9,7 @@
   OnChanges,
   ElementRef
 } from '@angular/core';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {GlobalRef} from './windowRef.service';
 import {AutoCompleteSearchService} from './auto-complete.service';
 
@@ -39,7 +39,7 @@ export interface Settings {
 }
 
 @Component({
-  selector: 'ng4geo-autocomplete',
+  selector: 'ngxgeo-autocomplete',
   template: `
     <div class="custom-autocomplete" *ngIf="!isSettingsError">
       <div class="custom-autocomplete__container">

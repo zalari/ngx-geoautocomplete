@@ -20,11 +20,11 @@ import { GlobalRef, BrowserGlobalRef } from './windowRef.service';
   ],
   providers : [{ provide: GlobalRef, useClass: BrowserGlobalRef }, AutoCompleteSearchService, LocalStorageService]
 })
-export class Ng4GeoautocompleteModule {
+export class NgxGeoautocompleteModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: Ng4GeoautocompleteModule
+      ngModule: NgxGeoautocompleteModule
     };
   }
 

@@ -1,5 +1,5 @@
 ﻿import {Injectable, PLATFORM_ID, Inject} from '@angular/core';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {GlobalRef} from './windowRef.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {LocalStorageService} from './storage.service';
