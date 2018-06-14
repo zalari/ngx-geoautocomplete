@@ -1,21 +1,20 @@
 ﻿import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { GlobalRef } from './windowRef.service';
-import { Http } from '@angular/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { LocalStorageService } from './storage.service';
 import 'rxjs/Rx';
 
 @Injectable()
 export class AutoCompleteSearchService {
-  constructor(private _http: Http, @Inject(PLATFORM_ID) private platformId: Object,
+  constructor(private _http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object,
   private _global: GlobalRef, private _localStorageService: LocalStorageService) {
 
   }
 
   getPredictions(url: string, query: string): Promise<any> {
     return new Promise(resolve => {
-      this._http.get(url, {params: {query: query}})
-      .map(res => res.json())
+      this._http.get(url, {params: new HttpParams().set("query", query)})
       .subscribe((data: any) => {
         if (data) {
           resolve(data);
@@ -27,10 +26,9 @@ export class AutoCompleteSearchService {
   }
 
 
-  getLatLngDetail(url: string, lat: number, lng: number): Promise<any> {
+  getLatLngDetail(url: string, lat: string, lng: string): Promise<any> {
     return new Promise(resolve => {
-      this._http.get(url, {params: {lat: lat, lng: lng}})
-      .map(res => res.json())
+      this._http.get(url, {params: new HttpParams().set("lat", lat).set("lng", lng)})
       .subscribe((data: any) => {
         if (data) {
           resolve(data);
@@ -44,8 +42,7 @@ export class AutoCompleteSearchService {
 
   getPlaceDetails(url: string, placeId: string): Promise<any> {
     return new Promise(resolve => {
-      this._http.get(url, {params: {query: placeId}})
-      .map(res => res.json())
+      this._http.get(url, {params: new HttpParams().set("query", placeId)})
       .subscribe((data: any) => {
         if (data) {
           resolve(data);
