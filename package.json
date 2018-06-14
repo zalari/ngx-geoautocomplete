@@ -2,7 +2,7 @@
   "name": "ngx-geoautocomplete",
   "version": "0.1.0",
   "description": "angular 6+ compatible google autocomplete with server side api support and AOT enabled",
-  "main": "./bundles/ng4-geoautocomplete.umd.js",
+  "main": "./bundles/ngx-geoautocomplete.umd.js",
   "module": "./index.js",
   "typings": "./index.d.ts",
   "scripts": {
