@@ -239,10 +239,13 @@ export interface Settings {
     }
 
     .custom-autocomplete__input input {
+      font-family: Roboto;
+      color: #2a2a2a;
       margin: 0;
       padding: 10px;
       height: 50px;
-      border: 1px solid #ccc;
+      border: 2px solid #dadfe6;
+      border-radius: 0.375rem;
       display: block;
       width: 100%;
       overflow: hidden;
