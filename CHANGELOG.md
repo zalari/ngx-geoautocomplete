@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/zalari/ngx-geoautocomplete/compare/v0.1.0...v0.1.1) (2018-12-11)
+
+
+### Bug Fixes
+
+* demo files are updated ([cd5310f](https://github.com/zalari/ngx-geoautocomplete/commit/cd5310f))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/tanoy009/ng4-geoautocomplete/compare/v1.0.0...v0.1.0) (2017-11-23)
 
