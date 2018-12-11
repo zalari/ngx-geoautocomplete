@@ -30,6 +30,9 @@
     "type": "git",
     "url": "git+https://github.com/zalari/ngx-geoautocomplete.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "angular6",
     "angular",
