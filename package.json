@@ -1,6 +1,6 @@
 {
   "name": "@zalari/ngx-geoautocomplete",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "angular 6+ compatible google autocomplete with server side api support and AOT enabled",
   "main": "./bundles/ngx-geoautocomplete.umd.js",
   "module": "./index.js",
