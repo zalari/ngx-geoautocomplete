@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnChanges, OnInit, Output, PLATFORM_ID } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnChanges, OnInit, Optional, Output, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { GlobalRef } from './windowRef.service';
 import { AutoCompleteSearchService } from './auto-complete.service';
@@ -32,7 +32,7 @@ export interface Settings {
   selector: 'ngxgeo-autocomplete',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="custom-autocomplete" *ngIf="!isSettingsError">
+    <div #containerRef class="custom-autocomplete" *ngIf="!isSettingsError">
       <div class="custom-autocomplete__container">
         <div class="custom-autocomplete__input" [ngClass]="{'button-included':settings.showSearchButton}">
           <input [(ngModel)]="locationInput" (click)="searchinputClickCallback($event)"
@@ -347,12 +347,12 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
     locationIconUrl: ''
   };
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private _elmRef: ElementRef, private _global: GlobalRef,
-              private _changeDetectorRef: ChangeDetectorRef,
-              private _autoCompleteSearchService: AutoCompleteSearchService) {
+  @ViewChild('containerRef')
+  private _containerRef: ElementRef;
 
-  }
+  constructor(private _global: GlobalRef,
+              private _autoCompleteSearchService: AutoCompleteSearchService,
+              @Optional() @Inject(PLATFORM_ID) private _platformId: Object | null) {}
 
   ngOnInit(): any {
     if (!this.moduleinit) {
@@ -388,7 +388,6 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       if (this.settings.showRecentSearch) {
         this.showRecentSearch();
       } else {
-        this._changeDetectorRef.markForCheck();
         this.dropdownOpen = false;
       }
     }
@@ -408,7 +407,6 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
   //function to execute when user select the autocomplete list.(binded with view)
   selectedListNode(index: number): any {
-    this._changeDetectorRef.markForCheck();
     this.dropdownOpen = false;
     if (this.recentDropdownOpen) {
       this.setRecentLocation(this.queryItems[index]);
@@ -419,10 +417,12 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
   //function to close the autocomplete list when clicked outside. (binded with view)
   @HostListener('document:click', ['$event'])
-  closeAutocomplete(event: any): any {
-    if (!this._elmRef.nativeElement.contains(event.target)) {
+  closeAutocomplete(event: MouseEvent): void {
+    const { top, right, bottom, left } = this._containerRef.nativeElement.getBoundingClientRect();
+    const { pageX, pageY } = event;
+    const isInside: boolean = pageX >= left && pageX <= right && pageY >= top && pageY <= bottom;
+    if (!isInside) {
       this.selectedDataIndex = -1;
-      this._changeDetectorRef.markForCheck();
       this.dropdownOpen = false;
     }
   }
@@ -439,8 +439,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
   //function to get user current location from the device.
   currentLocationSelected(): any {
-    if (isPlatformBrowser(this.platformId)) {
-      this._changeDetectorRef.markForCheck();
+    if (!this._platformId || isPlatformBrowser(this._platformId)) {
       this.gettingCurrentLocationFlag = true;
       this.dropdownOpen = false;
       this._autoCompleteSearchService.getGeoCurrentLocation().then((result: any) => {
@@ -557,14 +556,12 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
   //function to update the predicted list.
   private updateListItem(listData: any): any {
-    this._changeDetectorRef.markForCheck();
     this.queryItems = listData ? listData : [];
     this.dropdownOpen = true;
   }
 
   //function to show the recent search result.
   private showRecentSearch(): any {
-    this._changeDetectorRef.markForCheck();
     this.recentDropdownOpen = true;
     this.dropdownOpen = true;
     this._autoCompleteSearchService.getRecentList(this.settings.recentStorageName).then((result: any) => {
