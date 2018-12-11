@@ -3,7 +3,6 @@ import {isPlatformBrowser} from '@angular/common';
 import {GlobalRef} from './windowRef.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {LocalStorageService} from './storage.service';
-import 'rxjs/Rx';
 
 @Injectable()
 export class AutoCompleteSearchService {
