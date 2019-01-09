@@ -375,8 +375,8 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   // function called when there is a change in input. (Binded with view)
   searchinputCallback(event: KeyboardEvent): void {
     let inputVal: any = this.locationInput;
-    if ((event.keyCode === 40) || (event.keyCode === 38) || (event.keyCode === 13)) {
-      this.navigateInList(event.keyCode);
+    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) {
+      this.navigateInList(event.key);
     } else if (inputVal) {
       this.getListQuery(inputVal);
     } else {
@@ -576,13 +576,13 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   // function to navigate through list when up and down keyboard key is pressed;
   private navigateInList(key: string): void {
     let arrayIndex: number = 0;
-    //arrow down
-    if (keyCode === 40) {
+    // arrow down
+    if (key === 'ArrowDown') {
       if (this.selectedDataIndex >= 0) {
         arrayIndex = ((this.selectedDataIndex + 1) <= (this.queryItems.length - 1)) ? (this.selectedDataIndex + 1) : 0;
       }
       this.activeListNode(arrayIndex);
-    } else if (keyCode === 38) {//arrow up
+    } else if (key === 'ArrowUp') {// arrow up
       if (this.selectedDataIndex >= 0) {
         arrayIndex = ((this.selectedDataIndex - 1) >= 0) ? (this.selectedDataIndex - 1) : (this.queryItems.length - 1);
       } else {
