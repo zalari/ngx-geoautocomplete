@@ -354,26 +354,26 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
               private _autoCompleteSearchService: AutoCompleteSearchService,
               @Optional() @Inject(PLATFORM_ID) private _platformId: Object | null) {}
 
-  ngOnInit(): any {
+  ngOnInit(): void {
     if (!this.moduleinit) {
       this.moduleInit();
     }
   }
 
-  ngOnChanges(): any {
+  ngOnChanges(): void {
     this.moduleinit = true;
     this.moduleInit();
   }
 
 
   //function called when click event happens in input box. (Binded with view)
-  searchinputClickCallback(event: any): any {
+  searchinputClickCallback(event: any): void {
     event.target.select();
     this.searchinputCallback(event);
   }
 
   //function called when there is a change in input. (Binded with view)
-  searchinputCallback(event: any): any {
+  searchinputCallback(event: KeyboardEvent): void {
     let inputVal: any = this.locationInput;
     if ((event.keyCode === 40) || (event.keyCode === 38) || (event.keyCode === 13)) {
       this.navigateInList(event.keyCode);
@@ -394,7 +394,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to execute when user hover over autocomplete list.(binded with view)
-  activeListNode(index: number): any {
+  activeListNode(index: number): void {
     for (let i: number = 0; i < this.queryItems.length; i++) {
       if (index === i) {
         this.queryItems[i].active = true;
@@ -406,7 +406,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to execute when user select the autocomplete list.(binded with view)
-  selectedListNode(index: number): any {
+  selectedListNode(index: number): void {
     this.dropdownOpen = false;
     if (this.recentDropdownOpen) {
       this.setRecentLocation(this.queryItems[index]);
@@ -428,7 +428,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to manually trigger the callback to parent component when clicked search button.
-  userQuerySubmit(selectedOption?: any): any {
+  userQuerySubmit(selectedOption?: any): void {
     let _userOption: any = selectedOption === 'false' ? '' : this.userSelectedOption;
     if (_userOption) {
       this.componentCallback.emit({'response': true, 'data': this.userSelectedOption});
@@ -438,7 +438,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to get user current location from the device.
-  currentLocationSelected(): any {
+  currentLocationSelected(): void {
     if (!this._platformId || isPlatformBrowser(this._platformId)) {
       this.gettingCurrentLocationFlag = true;
       this.dropdownOpen = false;
@@ -454,7 +454,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //module initialization happens. function called by ngOninit and ngOnChange
-  private moduleInit(): any {
+  private moduleInit(): void {
     this.settings = this.setUserSettings();
     //condition to check if Radius is set without location detail.
     if (this.settings.geoRadius) {
@@ -493,7 +493,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to process the search query when pressed enter.
-  private processSearchQuery(): any {
+  private processSearchQuery(): void {
     if (this.queryItems.length) {
       if (this.selectedDataIndex > -1) {
         this.selectedListNode(this.selectedDataIndex);
@@ -518,7 +518,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to get the autocomplete list based on user input.
-  private getListQuery(value: string): any {
+  private getListQuery(value: string): void {
     this.recentDropdownOpen = false;
     if (this.settings.useGoogleGeoApi) {
       let _tempParams: any = {
@@ -542,7 +542,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to extratc custom data which is send by the server.
-  private extractServerList(arrayList: any, data: any): any {
+  private extractServerList(arrayList: any, data: any): void {
     if (arrayList.length) {
       let _tempData: any = data;
       for (let key of arrayList) {
@@ -555,13 +555,13 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to update the predicted list.
-  private updateListItem(listData: any): any {
+  private updateListItem(listData: any): void {
     this.queryItems = listData ? listData : [];
     this.dropdownOpen = true;
   }
 
   //function to show the recent search result.
-  private showRecentSearch(): any {
+  private showRecentSearch(): void {
     this.recentDropdownOpen = true;
     this.dropdownOpen = true;
     this._autoCompleteSearchService.getRecentList(this.settings.recentStorageName).then((result: any) => {
@@ -574,7 +574,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to navigate through list when up and down keyboard key is pressed;
-  private navigateInList(keyCode: number): any {
+  private navigateInList(keyCode: number): void {
     let arrayIndex: number = 0;
     //arrow down
     if (keyCode === 40) {
@@ -595,7 +595,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to execute to get location detail based on latitude and longitude.
-  private getCurrentLocationInfo(latlng: any): any {
+  private getCurrentLocationInfo(latlng: any): void {
     if (this.settings.useGoogleGeoApi) {
       this._autoCompleteSearchService.getGeoLatLngDetail(latlng).then((result: any) => {
         if (result) {
@@ -615,7 +615,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to retrive the location info based on goovle place id.
-  private getPlaceLocationInfo(selectedData: any): any {
+  private getPlaceLocationInfo(selectedData: any): void {
     if (this.settings.useGoogleGeoApi) {
       this._autoCompleteSearchService.getGeoPlaceDetail(selectedData.place_id).then((data: any) => {
         if (data) {
@@ -633,7 +633,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to store the selected user search in the localstorage.
-  private setRecentLocation(data: any): any {
+  private setRecentLocation(data: any): void {
     data = JSON.parse(JSON.stringify(data));
     data.description = data.description ? data.description : data.formatted_address;
     data.active = false;
@@ -651,7 +651,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   //function to retrive the stored recent user search from the localstorage.
-  private getRecentLocations(): any {
+  private getRecentLocations(): void {
     this._autoCompleteSearchService.getRecentList(this.settings.recentStorageName).then((data: any) => {
       this.recentSearchData = (data && data.length) ? data : [];
     });
