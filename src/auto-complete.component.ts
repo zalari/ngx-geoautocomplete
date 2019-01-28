@@ -1,32 +1,9 @@
 ﻿import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnChanges, OnInit, Optional, Output, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+
+import { Settings } from './settings.interface';
 import { GlobalRef } from './windowRef.service';
 import { AutoCompleteSearchService } from './auto-complete.service';
-
-export interface Settings {
-  geoPredictionServerUrl?: string;
-  geoLatLangServiceUrl?: string;
-  geoLocDetailServerUrl?: string;
-  geoCountryRestriction?: any;
-  geoTypes?: any;
-  geoLocation?: any;
-  geoRadius?: number;
-  serverResponseListHierarchy?: any;
-  serverResponseatLangHierarchy?: any;
-  serverResponseDetailHierarchy?: any;
-  resOnSearchButtonClickOnly?: boolean;
-  useGoogleGeoApi?: boolean;
-  inputPlaceholderText?: string;
-  inputString?: string;
-  showSearchButton?: boolean;
-  showRecentSearch?: boolean;
-  showCurrentLocation?: boolean;
-  recentStorageName?: string;
-  noOfRecentSearchSave?: number;
-  currentLocIconUrl?: string;
-  searchIconUrl?: string;
-  locationIconUrl?: string;
-}
 
 @Component({
   selector: 'ngxgeo-autocomplete',
@@ -307,8 +284,7 @@ export interface Settings {
 })
 export class AutoCompleteComponent implements OnInit, OnChanges {
   @Input() userSettings: Settings;
-  @Output()
-  componentCallback: EventEmitter<any> = new EventEmitter<any>();
+  @Output() componentCallback: EventEmitter<any> = new EventEmitter<any>();
 
   public locationInput: string = '';
   public gettingCurrentLocationFlag: boolean = false;
@@ -367,15 +343,14 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
 
   // function called when click event happens in input box. (Binded with view)
-  searchinputClickCallback(event: any): void {
-    event.target.select();
+  searchinputClickCallback(event: MouseEvent): void {
     this.searchinputCallback(event);
   }
 
   // function called when there is a change in input. (Binded with view)
-  searchinputCallback(event: KeyboardEvent): void {
+  searchinputCallback(event: KeyboardEvent | MouseEvent): void {
     let inputVal: any = this.locationInput;
-    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) {
+    if ('key' in event && ['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) {
       this.navigateInList(event.key);
     } else if (inputVal) {
       this.getListQuery(inputVal);
@@ -576,21 +551,37 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   // function to navigate through list when up and down keyboard key is pressed;
   private navigateInList(key: string): void {
     let arrayIndex: number = 0;
-    // arrow down
-    if (key === 'ArrowDown') {
-      if (this.selectedDataIndex >= 0) {
-        arrayIndex = ((this.selectedDataIndex + 1) <= (this.queryItems.length - 1)) ? (this.selectedDataIndex + 1) : 0;
-      }
-      this.activeListNode(arrayIndex);
-    } else if (key === 'ArrowUp') {// arrow up
-      if (this.selectedDataIndex >= 0) {
-        arrayIndex = ((this.selectedDataIndex - 1) >= 0) ? (this.selectedDataIndex - 1) : (this.queryItems.length - 1);
-      } else {
-        arrayIndex = this.queryItems.length - 1;
-      }
-      this.activeListNode(arrayIndex);
-    } else {
-      this.processSearchQuery();
+
+    switch (key) {
+      case 'ArrowDown':
+        if (this.selectedDataIndex >= 0) {
+          arrayIndex = ((this.selectedDataIndex + 1) <= (this.queryItems.length - 1)) ? (this.selectedDataIndex + 1) : 0;
+        }
+        this.activeListNode(arrayIndex);
+        break;
+
+      case 'ArrowUp':
+        if (this.selectedDataIndex >= 0) {
+          arrayIndex = ((this.selectedDataIndex - 1) >= 0) ? (this.selectedDataIndex - 1) : (this.queryItems.length - 1);
+        } else {
+          arrayIndex = this.queryItems.length - 1;
+        }
+        this.activeListNode(arrayIndex);
+        break;
+
+      case 'Enter':
+        this.processSearchQuery();
+
+        if (this.dropdownOpen) {
+          //
+        }
+
+        break;
+
+      default:
+        this.processSearchQuery();
+        break;
+
     }
   }
 
